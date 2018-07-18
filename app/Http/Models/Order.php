@@ -28,7 +28,8 @@ class Order extends Model
         'clint_rate_order_reasons_id',
         'clint_rate_order_text',
         'scheduling_orders',
-        'rate'
+        'rate',
+        'city_id'
 
     ];
 

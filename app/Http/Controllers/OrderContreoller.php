@@ -123,10 +123,14 @@ AS distance_in_km')
 sin(radians("lat")))) 
 AS distance_in_km')
                 )
-                ->having('distance_in_km', '>', $serach_provider_limit)
+//                ->having('distance_in_km', '>', $serach_provider_limit)
                 ->get();
             foreach ($ProvderQuery as $ProviderData) {
                 $provider_id = $ProviderData->provider_id;
+                $this->provider_rfused_order->create([
+                    "provider_id" => $provider_id,
+                    "order_id" => $order_id
+                ]);
             }
             /*end serach*/
 
@@ -198,7 +202,13 @@ AS distance_in_km')
         }
         /*end */
 
-        $this->PushNotificationToProvider($token_id, $Title, $request_time_duration, $price, $zone, $order_id);
+        $sendpush = $this->provider_rfused_order->where('order_id', $order_id)->get();
+        foreach ($sendpush as $Whois) {
+            $order_id = $Whois->order_id;
+            $this->PushNotificationToProvider($token_id, $Title, $request_time_duration, $price, $zone, $order_id);
+
+        };
+
     }
 
     public function PushNotificationToProvider($Token, $Title, $request_time_duration, $price, $zone, $order_id)
@@ -207,7 +217,7 @@ AS distance_in_km')
 
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $Token;
-        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
+        $serverKey = 'e3FeI7Px-Yo:APA91bGLIKFz-W-6aSx0iZksVEQ6YmN6rH0hBTGjXxTzQ5xjosTbTSgwTNnL5ZP-0RaHj4E0eXTucOk_VCdHFX1rGOnS4JU2sydnxxso9C7hNtoJPOIK3Iuqfm2mH6FgplP3VWKenVd2rv-42rCBP8SOq6qhh6GOtw';
         $title = $Title;
         $body = $title;
 
@@ -341,7 +351,7 @@ AS distance_in_km')
 
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $Token;
-        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
+        $serverKey = 'e3FeI7Px-Yo:APA91bGLIKFz-W-6aSx0iZksVEQ6YmN6rH0hBTGjXxTzQ5xjosTbTSgwTNnL5ZP-0RaHj4E0eXTucOk_VCdHFX1rGOnS4JU2sydnxxso9C7hNtoJPOIK3Iuqfm2mH6FgplP3VWKenVd2rv-42rCBP8SOq6qhh6GOtw';
         $title = $Title;
         $body = $title;
 
@@ -452,7 +462,7 @@ AS distance_in_km')
 
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $Token;
-        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
+        $serverKey = 'e3FeI7Px-Yo:APA91bGLIKFz-W-6aSx0iZksVEQ6YmN6rH0hBTGjXxTzQ5xjosTbTSgwTNnL5ZP-0RaHj4E0eXTucOk_VCdHFX1rGOnS4JU2sydnxxso9C7hNtoJPOIK3Iuqfm2mH6FgplP3VWKenVd2rv-42rCBP8SOq6qhh6GOtw';
         $title = $Title;
         $body = $title;
 
@@ -548,7 +558,7 @@ AS distance_in_km')
 
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $Token;
-        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
+        $serverKey = 'e3FeI7Px-Yo:APA91bGLIKFz-W-6aSx0iZksVEQ6YmN6rH0hBTGjXxTzQ5xjosTbTSgwTNnL5ZP-0RaHj4E0eXTucOk_VCdHFX1rGOnS4JU2sydnxxso9C7hNtoJPOIK3Iuqfm2mH6FgplP3VWKenVd2rv-42rCBP8SOq6qhh6GOtw';
         $title = $Title;
         $body = $title;
 
@@ -689,10 +699,9 @@ AS distance_in_km')
     {
 
 
-
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $Token;
-        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
+        $serverKey = 'e3FeI7Px-Yo:APA91bGLIKFz-W-6aSx0iZksVEQ6YmN6rH0hBTGjXxTzQ5xjosTbTSgwTNnL5ZP-0RaHj4E0eXTucOk_VCdHFX1rGOnS4JU2sydnxxso9C7hNtoJPOIK3Iuqfm2mH6FgplP3VWKenVd2rv-42rCBP8SOq6qhh6GOtw';
         $title = $Title;
         $body = $title;
 
