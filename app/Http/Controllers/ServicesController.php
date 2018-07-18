@@ -43,9 +43,10 @@ class ServicesController extends Controller
                         ->where($this->services_zone->getTable() . '.zone_id', $zone_Id);
                 }]);
             }])
-            ->join($this->sub_services->getTable(), $this->serivces->getTable() . '.services_id', $this->sub_services->getTable() . '.services_id')
-            ->join($this->services_zone->getTable(), $this->sub_services->getTable() . '.sub_services_id', $this->services_zone->getTable() . '.sub_services_id')
+            ->leftjoin($this->sub_services->getTable(), $this->serivces->getTable() . '.services_id', $this->sub_services->getTable() . '.services_id')
+            ->leftjoin($this->services_zone->getTable(), $this->sub_services->getTable() . '.sub_services_id', $this->services_zone->getTable() . '.sub_services_id')
             ->where($this->services_zone->getTable() . '.zone_id', $zone_Id)
+            ->groupBy($this->sub_services->getTable() . '.services_id')
             ->get();
 
         if (Count($output) > 0) {
@@ -120,7 +121,17 @@ class ServicesController extends Controller
         return $this->services_trems_conditions->take(1)->get();
     }
 
+    public function GetSubServicesRealtedMainSerbives($id)
+    {
 
+        return $this->sub_services
+            ->leftjoin($this->services_zone->getTable(),$this->sub_services->getTable().'.sub_services_id', $this->services_zone->getTable().'.sub_services_id')
+            ->with('ServicesZone')
+            ->where('services_id', $id)
+            ->take(1)
+            ->get();
+
+    }
 
 
 }

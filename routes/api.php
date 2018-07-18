@@ -33,6 +33,7 @@ Route::get('allserivces/{area}', 'ServicesController@GetALlServicesAndSupservice
 Route::get('favlocationlist/{id}', 'ServicesController@getFavLocationList');
 Route::get('servicesprice', 'ServicesController@ServicesPrice')->middleware('apilang');
 Route::get('getservicescondtions', 'ServicesController@GetSubServicesCondtions')->middleware('apilang');
+Route::get('getsubservicesrelatedmainservices/{id}', 'ServicesController@GetSubServicesRealtedMainSerbives')->middleware('apilang');
 /*end*/
 
 /* Order*/

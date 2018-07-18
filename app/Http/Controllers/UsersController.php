@@ -35,9 +35,6 @@ class UsersController extends Controller
     public function Login()
     {
         $input = Request()->all();
-//        if (strpos($input['phone'], '00966') !== false) {
-//            return ['error' => 'error'];
-//        } else {
         $input['phone'] = '00966' . $input['phone'];
         $check = $this->users->where('phone', $input['phone'])->get();
         if (count($check) > 0) {
@@ -49,6 +46,7 @@ class UsersController extends Controller
         } else {
             $input['v_code'] = $this->GenerateVCode();
             $this->SendSMSWithVcode($input['phone'], $input['v_code']);
+            $input['type'] = 2;
             $output = $this->users->create($input);
             return Response()->json($output);
         }
@@ -175,7 +173,8 @@ class UsersController extends Controller
         } else {
             $users = $this->users->create([
                 "user_name" => $input['user_name'],
-                "phone" => $input['phone']
+                "phone" => $input['phone'],
+                "type" => 3
             ]);
             $user_id = $users->user_id;
 

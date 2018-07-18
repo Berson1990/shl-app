@@ -205,76 +205,53 @@ AS distance_in_km')
     {
 
 
-        $content = array(
-            "en" => $Title
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $token = $Token;
+        $serverKey = 'AAAAfVoWvlg:APA91bEtgLVvVvAY-EYCRNi7KZUO5Rvq5Bg4sRVjtIbAoD4H0-WOKjtHtQv8h1ylzN94bpfaVkXcEByPYrmrscNvfR66A6AiO-KNyvZSuIieuYTBkgTCpbUBpUf22ddIBQ2O5cyWOD-3';
+        $title = $Title;
+        $body = $title;
+
+        $data = array(
+            "title" => $Title,
+            "duration" => $request_time_duration,
+            "pric" => $price,
+            "zone" => $zone,
+            "order_id" => $order_id
+
         );
 
-        $fields = array(
-            'app_id' => "6f9fbf9d-b26e-477a-9710-ed334b1a274b",
-            'include_player_ids' => array($Token),
-            'data' => array(
-                "title" => $Title,
-                "duration" => $request_time_duration,
-                "pric" => $price,
-                "zone" => $zone,
-                "order_id" => $order_id
+        $notification = array(
+            'title' => $title,
+            'text' => $data,
+            'sound' => 'default',
+            'badge' => '1'
 
-            ),
-            'contents' => $content
         );
 
-        $fields = json_encode($fields);
-//        print("\nJSON sent:\n");
-//        print($fields);
-
+        $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
+        $json = json_encode($arrayToSend);
+        $headers = array();
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: key=' . $serverKey;
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-            'Authorization: Basic MmE0MTg4YWQtY2NlOS00ODEwLTg3YTUtNWE3MjNjZDNkZDY1'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
+
+        if ($response === FALSE) {
+            die('FCM Send Error: ' . curl_error($ch));
+        } else {
+            echo $response;
+        }
+
         curl_close($ch);
+
 
         return $response;
 
-//        $url = "https://fcm.googleapis.com/fcm/send";
-//        $token = $Token;
-//        $serverKey = 'AAAAmpFst3U:APA91bE_XLKDIJBw8dRsf90q_cmAyHqoPlVFvDwQHHyQ57VmTbDPM4P7jYXKHsW0UAA6_4ODrGrO7v16I8cp97CfPm9hyou4gL-UAou8QcnSFq_o8pgaIsmnvJ0JuhHhpqX3wv7aIDTU';
-//        $title = $Title;
-//        $body = array(
-//            "title" => $Title,
-//            "duration" => $request_time_duration,
-//            "pric" => $price,
-//            "zone" => $zone,
-//            "order_id" => $order_id
-//        );
-//        $notification = array('title' => $title, 'text' => $body, 'sound' => 'default', 'badge' => '1');
-//        $arrayToSend = array('to' => $Token, 'notification' => $notification, 'priority' => 'high');
-////         print_r($arrayToSend);
-//        $json = json_encode($arrayToSend);
-//        $headers = array();
-//        $headers[] = 'Content-Type: application/json';
-//        $headers[] = 'Authorization: key=' . $serverKey;
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL, $url);
-//        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//
-//        $respons = curl_exec($ch);
-////        if ($respons === FALSE) {
-////            die('FCM Send Error: ' . curl_error($respons));
-////        } else {
-////         echo   $respons;
-////        }
-//
-//        curl_close($ch);
 
     }
 
@@ -362,33 +339,46 @@ AS distance_in_km')
     {
 
 
-        $content = array(
-            "en" => $Title
-        );
-        $ProviderData[] = ['type' => 'order_accepted'];
-        $ProviderData[] = ['order_id' => $order_id];
-        $fields = array(
-            'app_id' => "a3551d54-e1bc-4f12-874c-7f6cb7982f95",
-            'include_player_ids' => [$Token],
-            'data' => array("data" => $ProviderData),
-            'contents' => $content
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $token = $Token;
+        $serverKey = 'AAAAfVoWvlg:APA91bEtgLVvVvAY-EYCRNi7KZUO5Rvq5Bg4sRVjtIbAoD4H0-WOKjtHtQv8h1ylzN94bpfaVkXcEByPYrmrscNvfR66A6AiO-KNyvZSuIieuYTBkgTCpbUBpUf22ddIBQ2O5cyWOD-3';
+        $title = $Title;
+        $body = $title;
+
+        $data = array(
+            "data" => $ProviderData,
+            "order_id" => $order_id
         );
 
-        $fields = json_encode($fields);
- 
+        $notification = array(
+            'title' => $title,
+            'text' => $data,
+            'sound' => 'default',
+            'badge' => '1'
 
+        );
+
+        $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
+        $json = json_encode($arrayToSend);
+        $headers = array();
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: key=' . $serverKey;
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-            'Authorization: Basic NjY1ZDRkYjYtZDA5NC00NjFlLTlhMWEtNmFkODc0MGIyY2Rk'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
+
+        if ($response === FALSE) {
+            die('FCM Send Error: ' . curl_error($ch));
+        } else {
+            echo $response;
+        }
+
         curl_close($ch);
+
 
         return $response;
 
@@ -458,34 +448,50 @@ AS distance_in_km')
 
     public function HandlePushToClintWhenProvderCancelOrder($Title, $Token, $ProviderData)
     {
-        $content = array(
-            "en" => $Title
-        );
-        $ProviderData[] = ['type' => 'order_cancel'];
-        $fields = array(
-            'app_id' => "a3551d54-e1bc-4f12-874c-7f6cb7982f95",
-            'include_player_ids' => [$Token],
-            'data' => array("data" => $ProviderData),
-            'contents' => $content
-        );
-//        return $fields;
-        $fields = json_encode($fields);
 
 
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $token = $Token;
+        $serverKey = 'AAAAfVoWvlg:APA91bEtgLVvVvAY-EYCRNi7KZUO5Rvq5Bg4sRVjtIbAoD4H0-WOKjtHtQv8h1ylzN94bpfaVkXcEByPYrmrscNvfR66A6AiO-KNyvZSuIieuYTBkgTCpbUBpUf22ddIBQ2O5cyWOD-3';
+        $title = $Title;
+        $body = $title;
+
+        $data = array(
+            "data" => $ProviderData,
+        );
+
+        $notification = array(
+            'title' => $title,
+            'text' => $data,
+            'sound' => 'default',
+            'badge' => '1'
+
+        );
+
+        $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
+        $json = json_encode($arrayToSend);
+        $headers = array();
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: key=' . $serverKey;
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-            'Authorization: Basic NjY1ZDRkYjYtZDA5NC00NjFlLTlhMWEtNmFkODc0MGIyY2Rk'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
+
+        if ($response === FALSE) {
+            die('FCM Send Error: ' . curl_error($ch));
+        } else {
+            echo $response;
+        }
+
         curl_close($ch);
 
+
         return $response;
+
 
     }
 
@@ -532,7 +538,7 @@ AS distance_in_km')
         /*end */
 
 
-         $this->PushNotificationCancelOrderToProvider($token_id, $Title, $order_id);
+        $this->PushNotificationCancelOrderToProvider($token_id, $Title, $order_id);
         return ["state" => '202'];
     }
 
@@ -540,35 +546,45 @@ AS distance_in_km')
     {
 
 
-        $content = array(
-            "en" => $Title
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $token = $Token;
+        $serverKey = 'AAAAfVoWvlg:APA91bEtgLVvVvAY-EYCRNi7KZUO5Rvq5Bg4sRVjtIbAoD4H0-WOKjtHtQv8h1ylzN94bpfaVkXcEByPYrmrscNvfR66A6AiO-KNyvZSuIieuYTBkgTCpbUBpUf22ddIBQ2O5cyWOD-3';
+        $title = $Title;
+        $body = $title;
+
+        $data = array(
+            "order_id" => $order_id
         );
 
-        $fields = array(
-            'app_id' => "6f9fbf9d-b26e-477a-9710-ed334b1a274b",
-            'include_player_ids' => array($Token),
-            'data' => array(
-                "order_id" => $order_id
+        $notification = array(
+            'title' => $title,
+            'text' => $data,
+            'sound' => 'default',
+            'badge' => '1'
 
-            ),
-            'contents' => $content
         );
 
-        $fields = json_encode($fields);
-
-
+        $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
+        $json = json_encode($arrayToSend);
+        $headers = array();
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: key=' . $serverKey;
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-            'Authorization: Basic MmE0MTg4YWQtY2NlOS00ODEwLTg3YTUtNWE3MjNjZDNkZDY1'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
+
+        if ($response === FALSE) {
+            die('FCM Send Error: ' . curl_error($ch));
+        } else {
+            echo $response;
+        }
+
         curl_close($ch);
+
 
         return $response;
 
@@ -671,32 +687,48 @@ AS distance_in_km')
 
     public function HandlePushToClintWhenFinsishOrder($Title, $Token, $ProviderData)
     {
-        $content = array(
-            "en" => $Title
-        );
-        $ProviderData[] = ['type' => 'order_finish'];
-        $fields = array(
-            'app_id' => "a3551d54-e1bc-4f12-874c-7f6cb7982f95",
-            'include_player_ids' => [$Token],
-            'data' => array("data" => $ProviderData),
-            'contents' => $content
-        );
-//        return $fields;
-        $fields = json_encode($fields);
 
 
+
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $token = $Token;
+        $serverKey = 'AAAAfVoWvlg:APA91bEtgLVvVvAY-EYCRNi7KZUO5Rvq5Bg4sRVjtIbAoD4H0-WOKjtHtQv8h1ylzN94bpfaVkXcEByPYrmrscNvfR66A6AiO-KNyvZSuIieuYTBkgTCpbUBpUf22ddIBQ2O5cyWOD-3';
+        $title = $Title;
+        $body = $title;
+
+        $data = array(
+            "data" => $ProviderData
+        );
+
+        $notification = array(
+            'title' => $title,
+            'text' => $data,
+            'sound' => 'default',
+            'badge' => '1'
+
+        );
+
+        $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
+        $json = json_encode($arrayToSend);
+        $headers = array();
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: key=' . $serverKey;
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-            'Authorization: Basic NjY1ZDRkYjYtZDA5NC00NjFlLTlhMWEtNmFkODc0MGIyY2Rk'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
+
+        if ($response === FALSE) {
+            die('FCM Send Error: ' . curl_error($ch));
+        } else {
+            echo $response;
+        }
+
         curl_close($ch);
+
 
         return $response;
 
