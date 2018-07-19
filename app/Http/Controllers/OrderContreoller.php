@@ -217,7 +217,7 @@ AS distance_in_km')
 
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $Token;
-        $serverKey = 'e3FeI7Px-Yo:APA91bGLIKFz-W-6aSx0iZksVEQ6YmN6rH0hBTGjXxTzQ5xjosTbTSgwTNnL5ZP-0RaHj4E0eXTucOk_VCdHFX1rGOnS4JU2sydnxxso9C7hNtoJPOIK3Iuqfm2mH6FgplP3VWKenVd2rv-42rCBP8SOq6qhh6GOtw';
+        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
         $title = $Title;
         $body = $title;
 
@@ -251,16 +251,16 @@ AS distance_in_km')
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
 
-        if ($response === FALSE) {
-            die('FCM Send Error: ' . curl_error($ch));
-        } else {
-            echo $response;
-        }
+        // if ($response === FALSE) {
+        //     die('FCM Send Error: ' . curl_error($ch));
+        // } else {
+        //     // echo $response;
+        // }
 
         curl_close($ch);
 
 
-        return $response;
+        // return $response;
 
 
     }
@@ -351,7 +351,7 @@ AS distance_in_km')
 
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $Token;
-        $serverKey = 'e3FeI7Px-Yo:APA91bGLIKFz-W-6aSx0iZksVEQ6YmN6rH0hBTGjXxTzQ5xjosTbTSgwTNnL5ZP-0RaHj4E0eXTucOk_VCdHFX1rGOnS4JU2sydnxxso9C7hNtoJPOIK3Iuqfm2mH6FgplP3VWKenVd2rv-42rCBP8SOq6qhh6GOtw';
+        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
         $title = $Title;
         $body = $title;
 
@@ -462,7 +462,7 @@ AS distance_in_km')
 
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $Token;
-        $serverKey = 'e3FeI7Px-Yo:APA91bGLIKFz-W-6aSx0iZksVEQ6YmN6rH0hBTGjXxTzQ5xjosTbTSgwTNnL5ZP-0RaHj4E0eXTucOk_VCdHFX1rGOnS4JU2sydnxxso9C7hNtoJPOIK3Iuqfm2mH6FgplP3VWKenVd2rv-42rCBP8SOq6qhh6GOtw';
+        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
         $title = $Title;
         $body = $title;
 
@@ -491,16 +491,16 @@ AS distance_in_km')
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
 
-        if ($response === FALSE) {
-            die('FCM Send Error: ' . curl_error($ch));
-        } else {
-            echo $response;
-        }
+        // if ($response === FALSE) {
+        //     die('FCM Send Error: ' . curl_error($ch));
+        // } else {
+        //     echo $response;
+        // }
 
         curl_close($ch);
 
 
-        return $response;
+        // return $response;
 
 
     }
@@ -558,7 +558,7 @@ AS distance_in_km')
 
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $Token;
-        $serverKey = 'e3FeI7Px-Yo:APA91bGLIKFz-W-6aSx0iZksVEQ6YmN6rH0hBTGjXxTzQ5xjosTbTSgwTNnL5ZP-0RaHj4E0eXTucOk_VCdHFX1rGOnS4JU2sydnxxso9C7hNtoJPOIK3Iuqfm2mH6FgplP3VWKenVd2rv-42rCBP8SOq6qhh6GOtw';
+        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
         $title = $Title;
         $body = $title;
 
@@ -587,16 +587,16 @@ AS distance_in_km')
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
 
-        if ($response === FALSE) {
-            die('FCM Send Error: ' . curl_error($ch));
-        } else {
-            echo $response;
-        }
+        // if ($response === FALSE) {
+        //     die('FCM Send Error: ' . curl_error($ch));
+        // } else {
+        //     echo $response;
+        // }
 
         curl_close($ch);
 
 
-        return $response;
+        // return $response;
 
 
     }
@@ -701,7 +701,7 @@ AS distance_in_km')
 
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $Token;
-        $serverKey = 'e3FeI7Px-Yo:APA91bGLIKFz-W-6aSx0iZksVEQ6YmN6rH0hBTGjXxTzQ5xjosTbTSgwTNnL5ZP-0RaHj4E0eXTucOk_VCdHFX1rGOnS4JU2sydnxxso9C7hNtoJPOIK3Iuqfm2mH6FgplP3VWKenVd2rv-42rCBP8SOq6qhh6GOtw';
+        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
         $title = $Title;
         $body = $title;
 
@@ -730,16 +730,16 @@ AS distance_in_km')
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
 
-        if ($response === FALSE) {
-            die('FCM Send Error: ' . curl_error($ch));
-        } else {
-            echo $response;
-        }
+        // if ($response === FALSE) {
+        //     die('FCM Send Error: ' . curl_error($ch));
+        // } else {
+        //     echo $response;
+        // }
 
         curl_close($ch);
 
 
-        return $response;
+        // return $response;
 
     }
 
