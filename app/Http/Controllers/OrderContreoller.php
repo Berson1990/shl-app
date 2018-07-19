@@ -12,7 +12,7 @@ use App\Http\Models\ServicesType;
 use App\Http\Models\Users;
 use App\Http\Models\ServicesZone;
 use App\Http\Models\Zone;
-use App\Http\Models\ProvidersRefusedOrder;
+use App\Http\Models\ProvidersOrder;
 use App\Http\Models\CancelOrderReasons;
 use App\Http\Models\ClintCancelOrderReasons;
 
@@ -30,7 +30,7 @@ class OrderContreoller extends Controller
         $this->users = new Users();
         $this->services_zone = new ServicesZone();
         $this->zone = new Zone();
-        $this->provider_rfused_order = new ProvidersRefusedOrder();
+        $this->provider_order = new ProvidersOrder();
         $this->cancel_order_reasonse = new CancelOrderReasons();
         $this->clint_cancel_order_reasonse = new ClintCancelOrderReasons();
 
@@ -89,7 +89,7 @@ class OrderContreoller extends Controller
 
 
         /* get Previos Privders Refused this Order */
-        $PrviderRefusedQuery = $this->provider_rfused_order->where('order_id', $order_id)->get();
+        $PrviderRefusedQuery = $this->provider_order->where('order_id', $order_id)->get();
 
         /*check if empty query*/
         if (empty($PrviderRefusedQuery)) {
@@ -127,7 +127,7 @@ AS distance_in_km')
                 ->get();
             foreach ($ProvderQuery as $ProviderData) {
                 $provider_id = $ProviderData->provider_id;
-                $this->provider_rfused_order->create([
+                $this->provider_order->create([
                     "provider_id" => $provider_id,
                     "order_id" => $order_id
                 ]);
@@ -202,7 +202,7 @@ AS distance_in_km')
         }
         /*end */
 
-        $sendpush = $this->provider_rfused_order->where('order_id', $order_id)->get();
+        $sendpush = $this->provider_order->where('order_id', $order_id)->get();
         foreach ($sendpush as $Whois) {
             $order_id = $Whois->order_id;
             $this->PushNotificationToProvider($token_id, $Title, $request_time_duration, $price, $zone, $order_id);
@@ -251,11 +251,11 @@ AS distance_in_km')
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
 
-        // if ($response === FALSE) {
-        //     die('FCM Send Error: ' . curl_error($ch));
-        // } else {
-        //     // echo $response;
-        // }
+        if ($response === FALSE) {
+            die('FCM Send Error: ' . curl_error($ch));
+        } else {
+            // echo $response;
+        }
 
         curl_close($ch);
 
@@ -265,6 +265,7 @@ AS distance_in_km')
 
     }
 
+    /* dprecated*/
     public function RefusedOrder()
     {
         global $user_lat;
@@ -272,7 +273,7 @@ AS distance_in_km')
         global $services_id;
 
         $input = Request()->all();
-        $this->provider_rfused_order->create($input);
+        $this->provider_order->create($input);
 
         $order_id = $input['order_id'];
 
@@ -290,13 +291,17 @@ AS distance_in_km')
 
     }
 
+    /*end*/
     public function AcceptedOrder($id)
     {
         global $user_id;
         $input = Request()->all();
-        $this->order->find($id)->update(["provider_id" => $input['provider_id']]);
+        $this->order->find($id)->update([
+            "provider_id" => $input['provider_id'],
+            "order_state" => 2
+        ]);
         $this->HandlePushToClint($id);
-        $this->provider_rfused_order->where('order_id', $id)->delete();
+        $this->provider_order->where('order_id', $id)->delete();
         $OrderQuery = $this->order->where('order_id', $id)
             ->get();
         foreach ($OrderQuery as $item) {
@@ -351,24 +356,11 @@ AS distance_in_km')
 
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $Token;
-        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
+        $serverKey = 'AAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzAAAAAyl_S8gQ:APA91bGAU3yGBKZuuzHqqVg8Pn4nkpYXcRwwTV6iQbehYrxDVmTCZJLhzZI69WLrLqQBz1kjS2WlRkhaRozrmm8s09xb6pjzcGeAdY2yvSHUC8AYhXLNK_FBHXjs6tTyF-wP0lVbGBgPjptZVlhrM32B0KrcnBpHzA';
         $title = $Title;
         $body = $title;
-
-        $data = array(
-            "data" => $ProviderData,
-            "order_id" => $order_id
-        );
-
-        $notification = array(
-            'title' => $title,
-            'text' => $data,
-            'sound' => 'default',
-            'badge' => '1'
-
-        );
-
-        $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
+        $notification = array('title' => $title, 'text' => $ProviderData, 'order_id' => $order_id, 'sound' => 'default', 'badge' => '1');
+        $arrayToSend = array('to' => $token, 'notification' => $notification, 'text' => $ProviderData, 'order_id' => $order_id, 'priority' => 'high');
         $json = json_encode($arrayToSend);
         $headers = array();
         $headers[] = 'Content-Type: application/json';
@@ -381,17 +373,16 @@ AS distance_in_km')
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
 
-        if ($response === FALSE) {
-            die('FCM Send Error: ' . curl_error($ch));
-        } else {
-            echo $response;
-        }
+//        if ($response === FALSE) {
+//            die('FCM Send Error: ' . curl_error($ch));
+//        } else {
+////            echo $response;
+//        }
 
         curl_close($ch);
 
 
-        return $response;
-
+//        return $response;
 
     }
 
@@ -412,7 +403,7 @@ AS distance_in_km')
         $output = $this->order->find($order_id)->update([
             "cancel_order_reasons_id" => $input['cancel_order_reasons_id'],
             "cancel_order_reasons_text" => $input['cancel_order_reasons_text'],
-            "order_state" => 4
+            "order_state" => 5
         ]);
         $this->HandleParamtesTOSetPushWhenProviderCancelOrder($order_id);
 
@@ -466,18 +457,7 @@ AS distance_in_km')
         $title = $Title;
         $body = $title;
 
-        $data = array(
-            "data" => $ProviderData,
-        );
-
-        $notification = array(
-            'title' => $title,
-            'text' => $data,
-            'sound' => 'default',
-            'badge' => '1'
-
-        );
-
+        $notification = array('title' => $title, 'text' => $ProviderData, 'sound' => 'default', 'badge' => '1');
         $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
         $json = json_encode($arrayToSend);
         $headers = array();
@@ -510,8 +490,9 @@ AS distance_in_km')
     {
         global $token_id;
         global $Title;
+        global $lang_id;
         $this->order->find($order_id)->update([
-            "order_state" => 2,
+            "order_state" => 3,
         ]);
         global $provider_id;
         $ProvderQuery = $this->order->select('provider_id')->where('order_id', $order_id)->get();
@@ -562,17 +543,7 @@ AS distance_in_km')
         $title = $Title;
         $body = $title;
 
-        $data = array(
-            "order_id" => $order_id
-        );
-
-        $notification = array(
-            'title' => $title,
-            'text' => $data,
-            'sound' => 'default',
-            'badge' => '1'
-
-        );
+        $notification = array('title' => $title, 'text' => $title, 'order_id' => $order_id, 'sound' => 'default', 'badge' => '1');
 
         $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
         $json = json_encode($arrayToSend);
@@ -606,7 +577,7 @@ AS distance_in_km')
     {
         $input = Request()->all();
         $this->order->find($order_id)->update([
-            "order_state" => 2,
+            "order_state" => 4,
             "rate" => $input['rate'],
 //            "clint_rate_order_reasons_id" => $input['clint_rate_order_reasons_id'],
             "clint_rate_order_text" => $input['clint_rate_order_text']
@@ -650,7 +621,7 @@ AS distance_in_km')
     public function FinishOrderSuccess($order_id)
     {
         $this->order->find($order_id)->update([
-            "order_state" => 2
+            "order_state" => 3
         ]);
 
         $this->HandleParamtesTOSetPushWhenFinishOrder($order_id);
@@ -705,18 +676,7 @@ AS distance_in_km')
         $title = $Title;
         $body = $title;
 
-        $data = array(
-            "data" => $ProviderData
-        );
-
-        $notification = array(
-            'title' => $title,
-            'text' => $data,
-            'sound' => 'default',
-            'badge' => '1'
-
-        );
-
+        $notification = array('title' => $title, 'text' => $ProviderData, 'sound' => 'default', 'badge' => '1');
         $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
         $json = json_encode($arrayToSend);
         $headers = array();
@@ -781,6 +741,17 @@ AS distance_in_km')
 
     }
 
+    /* get orders for provider */
+    public function GetMyRecanltyOrder($provder_id)
+    {
+        return $this->provider_order->with('Order.Service', 'Order.SubServices')->where('provider_id', $provder_id)->get();
+    }
+
+    public function getLastOrder($id)
+    {
+
+        return $this->order->where('user_id', $id)->orderby('order_id', 'DESC')->get();
+    }
 
 }
 

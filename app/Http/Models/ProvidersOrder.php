@@ -11,13 +11,18 @@ namespace App\Http\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProvidersRefusedOrder extends Model
+class ProvidersOrder extends Model
 {
-    protected $table ='providers_refused_order';
-    protected $primaryKey = 'providers_refused_order_id';
+    protected $table = 'providers_order';
+    protected $primaryKey = 'providers_order_id';
     protected $fillable = [
         'provider_id',
         'order_id'
     ];
+
+    public function Order()
+    {
+        return $this->belongsTo('App\Http\Models\Order', 'order_id');
+    }
 
 }

@@ -48,6 +48,8 @@ Route::get('getprovidercancelreasone', 'OrderContreoller@GetCancelOrderReasons')
 Route::get('getclintcancelreasone', 'OrderContreoller@GetClintCancelOrderReasons')->middleware('apilang');
 Route::get('clintordershoistry/{id}', 'OrderContreoller@GetClintOrderHistory')->middleware('apilang');
 Route::get('providerordershoistry/{id}', 'OrderContreoller@GetProviderOrderHistory')->middleware('apilang');
+Route::get('getmyrecentorder/{provider_id}', 'OrderContreoller@GetMyRecanltyOrder')->middleware('apilang');
+Route::get('getlastorderfortest/{user_id}', 'OrderContreoller@getLastOrder');
 Route::post('createorder', 'OrderContreoller@CreateOrder');
 Route::post('refusedorder', 'OrderContreoller@RefusedOrder');
 
